@@ -1,61 +1,83 @@
-var addition = {};
-var subtract = {};
-  var multiply = {};
-    var divide = {};
-    var math = {addition,subtract,multiply,divide}
+var clientInputs = {};
 $(document).ready(function(){
   console.log("JQUERY GOOD");
-  // function addition(){
-
-    // $.ajax({
-    //   type: 'GET',
-    //   url: '/addition',
-    //   success: function(response) {
-    //     console.log('response', response);
-    //         }
-    //
-    // });  //closes ajax
-    //
-
 
 
   $(".addButton").on('click', function(){
-    addition.numberOne = $("#firstNumber").val();
-    addition.numberTwo = $("#secondNumber").val();
-    addition.type = "add";
-    console.log(addition);
+    clientInputs.numberOne = $("#firstNumber").val();
+    clientInputs.numberTwo = $("#secondNumber").val();
+    clientInputs.type = "add";
+    console.log(clientInputs);
     poster();
   });
-    $(".subtractButton").on('click', function(){
-      subtract.numberOne = $("#firstNumber").val();
-      subtract.numberTwo = $("#secondNumber").val();
-      subtract.type = "subtract";
-      console.log(subtract);
-      poster();
-    });
-      $("#multiplyButton").on('click', function(){
-        multiply.numberOne = $("#firstNumber").val();
-        multiply.numberTwo = $("#secondNumber").val();
-        multiply.type = "multiply";
-      });
-        $("#divideButton").on('click', function(){
-          divide.numberOne = $("#firstNumber").val();
-          divide.numberTwo = $("#secondNumber").val();
-          divide.type = "divide";
-        });
+
+  $(".subtractButton").on('click', function(){
+    clientInputs.numberOne = $("#firstNumber").val();
+    clientInputs.numberTwo = $("#secondNumber").val();
+    clientInputs.type = "subtract";
+    console.log(clientInputs);
+    poster();
+  });
+
+  $(".multiplyButton").on('click', function(){
+    clientInputs.numberOne = $("#firstNumber").val();
+    clientInputs.numberTwo = $("#secondNumber").val();
+    clientInputs.type = "multiply";
+    console.log(clientInputs);
+    multiplyAjaxFun();
+  });
+
+  $(".divideButton").on('click', function(){
+    clientInputs.numberOne = $("#firstNumber").val();
+    clientInputs.numberTwo = $("#secondNumber").val();
+    clientInputs.type = "divide";
+    divideAjaxFun();
+    console.log(clientInputs);
+  });
 
 
-function poster(){
+  $("#clear").on('click', function(){
+      $('h2').text('');
+      $('input[type="number"], textarea').val('');
+    console.log("clear clicked");
+  });
+
+  function poster(){
     $.ajax({
       type: 'POST',
       url: '/adderFunction/',
       // data: $("#newFishName").val(); can be written like this
-      data: math,  /// this becomes req.body
+      data: clientInputs,
       success: function(response){
         console.log("this on",response);
         $('#answer').append(response+'<br>');
       }  //closes success post
-}); //closes ajax post
-};// closes poster function
+    }); //closes ajax post
+  };// closes poster function
 
-  });
+
+  function multiplyAjaxFun(){
+    $.ajax({
+      type: 'POST',
+      url: '/multiplyFunction',
+      data: clientInputs,
+      success: function(response){
+        console.log("this on",response);
+        $('#answer').append(response+'<br>');
+      }  //closes success post
+    }); //closes ajax post
+  };// closes multiplyFunction
+
+  function divideAjaxFun(){
+    $.ajax({
+      type: 'POST',
+      url: '/dividerFunction',
+      data: clientInputs,
+      success: function(response){
+        console.log("this on",response);
+        $('#answer').append(response+'<br>');
+      }  //closes success post
+    }); //closes ajax post
+  };// closes divider function
+
+});
